@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhisek Jena (Akash) — Portfolio & AI Assistant</title>
+    <!-- Tailwind CSS, FontAwesome, Marked.js, Three.js -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              darkBg: "#06070a",
+              darkSurface: "#0c0e17",
+              neonBlue: "#2563eb",
+              cyanGlow: "#06b6d4",
+              radiantAmber: "#f97316",
+              goldAccent: "#fbbf24",
+            },
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: #06070a;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #f1f5f9;
+      }
+      .glass {
+        background: rgba(13, 16, 28, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .topo-text {
+        background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 45%, #fb923c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .cursor-blink::after {
+        content: '▋';
+        animation: blink 0.8s infinite;
+        color: #06b6d4;
+      }
+      @keyframes blink {
+        0%, 50% { opacity: 1; }
+        50.1%, 100% { opacity: 0; }
+      }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #06070a; }
+      ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(249, 115, 22, 0.4); }
+    </style>
+</head>
+<body class="relative overflow-x-hidden">
+
+    <!-- 3D Wave Wireframe Canvas -->
+    <div id="canvas-container" class="fixed inset-0 pointer-events-none z-0 opacity-60"></div>
+
+    <!-- Soft Glow Orbs -->
+    <div class="fixed -top-40 -left-40 w-96 h-96 rounded-full bg-blue-600/20 blur-[130px] pointer-events-none"></div>
+    <div class="fixed -bottom-40 -right-40 w-96 h-96 rounded-full bg-orange-600/20 blur-[130px] pointer-events-none"></div>
+
+    <!-- Top Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-40 glass border-b border-white/10 px-4 sm:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-neonBlue to-radiantAmber flex items-center justify-center shadow-lg text-white font-black text-sm">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <div>
+                    <span class="font-extrabold text-white text-base tracking-tight">Abhisek Jena <span class="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">Akash</span></span>
+                    <p class="text-[10px] text-gray-400">Software QA • Dev • AI</p>
+                </div>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
+                <a href="#about" class="hover:text-cyanGlow transition">About</a>
+                <a href="#skills" class="hover:text-cyanGlow transition">Skills</a>
+                <a href="#projects" class="hover:text-cyanGlow transition">Projects</a>
+                <a href="#education" class="hover:text-cyanGlow transition">Education</a>
+                <a href="#contact" class="hover:text-cyanGlow transition">Contact</a>
+                <button onclick="openModal()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-neonBlue to-cyanGlow text-white text-xs font-semibold shadow-md hover:scale-105 transition">
+                    <i class="fa-solid fa-sparkles text-goldAccent"></i> Ask My AI
+                </button>
+            </nav>
+
+            <button onclick="openModal()" class="md:hidden p-2 rounded-lg bg-blue-600/20 border border-blue-500/30 text-cyanGlow" aria-label="Open AI Assistant">
+                <i class="fa-solid fa-sparkles"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-28 pb-16 px-4 sm:px-8 max-w-7xl mx-auto space-y-24">
+
+        <!-- Hero Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start min-h-[75vh] pt-4">
+            
+            <!-- Left Info Column -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left pt-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-cyanGlow">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    Software Engineer & QA Professional • B.Tech CSE '26
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-white leading-tight">
+                    Hi, I'm <span class="topo-text">Abhisek Jena</span>
+                </h1>
+                
+                <p class="text-gray-300 text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    Computer Science graduate specializing in <strong class="text-white">Software Quality Assurance</strong>, 
+                    <strong class="text-white">SQL Optimization</strong>, and <strong class="text-white">Machine Learning & Automation</strong>.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+                    <a href="#projects" class="px-5 py-3 rounded-xl bg-neonBlue hover:bg-blue-600 text-white text-xs font-bold transition flex items-center gap-2 shadow-lg">
+                        View Projects <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <button onclick="openModal()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-radiantAmber to-goldAccent text-darkBg text-xs font-bold transition flex items-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Ask My AI Assistant
+                    </button>
+                    <a href="Abhisek_Jena_Resume.pdf" download class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 text-xs font-medium hover:bg-white/10 transition">
+                        <i class="fa-solid fa-file-arrow-down mr-1"></i> Resume PDF
+                    </a>
+                </div>
+
+                <div class="flex items-center justify-center lg:justify-start gap-4 text-xs text-gray-400 pt-2">
+                    <span><i class="fa-solid fa-location-dot text-radiantAmber mr-1"></i> Bhadrak, Odisha, India</span>
+                    <span>•</span>
+                    <a href="https://github.com/Akash111-a" target="_blank" class="hover:text-cyanGlow"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+                </div>
+            </div>
+
+            <!-- Pure Floating Character in Top-Right Corner (Zero Box / Zero Tags) -->
+            <div class="lg:col-span-5 flex justify-center lg:justify-end items-start relative select-none">
+                <div class="relative w-64 sm:w-80 lg:w-96 flex items-start justify-center">
+                    
+                    <!-- Soft Ambient Cyan/Blue Backlight Only -->
+                    <div class="absolute top-1/4 w-56 h-56 rounded-full bg-gradient-to-tr from-cyanGlow/25 via-neonBlue/20 to-transparent blur-3xl opacity-75 pointer-events-none"></div>
+
+                    <!-- Pure Character Cutout with Smooth Bottom Fade (No box, no card) -->
+                    <img 
+                        src="profile.png" 
+                        alt="Abhisek Jena (Akash)" 
+                        class="relative z-10 w-full h-auto object-contain pointer-events-none filter drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
+                        style="-webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 98%); mask-image: linear-gradient(to bottom, black 65%, transparent 98%);"
+                        onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80'"
+                    >
+                </div>
+            </div>
+
+        </section>
+
+        <!-- About Cards -->
+        <section id="about" class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-cyanGlow">Expertise & Focus</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="p-6 rounded-2xl glass space-y-2 border border-white/10 hover:border-cyanGlow/40 transition">
+                    <i class="fa-solid fa-shield-halved text-2xl text-cyanGlow mb-2"></i>
+                    <h3 class="text-base font-bold text-white">Quality Assurance & STLC</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">Functional, integration, regression, smoke, and sanity testing with boundary value analysis and equivalence partitioning.</p>
+                </div>
+                <div class="p-6 rounded-2xl glass space-y-2 border border-white/10 hover:border-radiantAmber/40 transition">
+                    <i class="fa-solid fa-database text-2xl text-radiantAmber mb-2"></i>
+                    <h3 class="text-base font-bold text-white">SQL & Relational Databases</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">Practiced 400+ SQL queries in Oracle SQL*Plus. Mastery over correlated subqueries, joins, grouping, and schema constraints.</p>
+                </div>
+                <div class="p-6 rounded-2xl glass space-y-2 border border-white/10 hover:border-blue-400/40 transition">
+                    <i class="fa-solid fa-brain text-2xl text-blue-400 mb-2"></i>
+                    <h3 class="text-base font-bold text-white">Machine Learning & Automation</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">Topological graph neural networks (97.4% fraud accuracy), touchless computer vision with OpenCV/MediaPipe, and Docker/AWS.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills -->
+        <section id="skills" class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-radiantAmber">Skill Matrix</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-5 rounded-xl glass border border-white/10">
+                    <h3 class="text-xs font-bold text-cyanGlow uppercase mb-3">Testing</h3>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] text-gray-300">
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">STLC / SDLC</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Regression</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Integration</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">BVA & EP</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Defect Life Cycle</span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-xl glass border border-white/10">
+                    <h3 class="text-xs font-bold text-radiantAmber uppercase mb-3">Databases</h3>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] text-gray-300">
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Oracle SQL</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">MySQL</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Correlated Subqueries</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Joins & Views</span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-xl glass border border-white/10">
+                    <h3 class="text-xs font-bold text-blue-400 uppercase mb-3">Languages & Dev</h3>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] text-gray-300">
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Python</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Java</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">C++</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">FastAPI</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">React.js</span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-xl glass border border-white/10">
+                    <h3 class="text-xs font-bold text-emerald-400 uppercase mb-3">DevOps & Cloud</h3>
+                    <div class="flex flex-wrap gap-1.5 text-[11px] text-gray-300">
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Docker</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Kubernetes</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">AWS</span>
+                        <span class="px-2 py-1 rounded bg-white/5 border border-white/5">Git & Linux</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Projects -->
+        <section id="projects" class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-cyanGlow">Featured Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- 1. DoomAI — Resume Parser -->
+                <div class="p-6 rounded-2xl glass border border-white/10 flex flex-col justify-between hover:border-cyanGlow/40 transition">
+                    <div>
+                        <div class="flex items-center justify-between text-[10px] text-gray-400 mb-2">
+                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-cyanGlow border border-blue-500/20">AI / LLM Application</span>
+                            <span class="text-emerald-400 font-semibold">Live Production</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">DoomAI — Resume Parser</h3>
+                        <p class="text-xs text-radiantAmber font-semibold mt-1">Real-Time Extraction & Streaming Chat</p>
+                        <p class="text-xs text-gray-300 mt-2 leading-relaxed">
+                            Intelligent candidate screening platform powered by Groq and Llama-3.3. Ingests PDF resumes in-memory, parses structured candidate schemas, and streams real-time evaluation insights to hiring managers.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="mt-4 pt-3 border-t border-white/10 text-[11px] text-gray-400 mb-4">
+                            FastAPI • Groq API • Llama 3.3 • PyPDF • JavaScript
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a
+                                href="https://doomai-frontend.vercel.app/"
+                                target="_blank"
+                                rel="noreferrer"
+                                class="flex-1 py-2 px-3 rounded-lg bg-gradient-to-r from-neonBlue to-cyanGlow text-white text-xs font-bold text-center shadow hover:opacity-90 transition flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+                            </a>
+                            <a
+                                href="https://github.com/Akash111-a/DOOM_AI"
+                                target="_blank"
+                                rel="noreferrer"
+                                class="py-2 px-3 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-xs font-medium hover:text-white hover:bg-white/10 transition flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-brands fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. JARVIS AI Voice Assistant with Gesture Control -->
+                <div class="p-6 rounded-2xl glass border border-white/10 flex flex-col justify-between hover:border-cyanGlow/40 transition">
+                    <div>
+                        <div class="flex items-center justify-between text-[10px] text-gray-400 mb-2">
+                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-cyanGlow border border-blue-500/20">Computer Vision</span>
+                            <span class="text-emerald-400 font-semibold">Desktop App</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">JARVIS AI Voice Assistant with Gesture Control</h3>
+                        <p class="text-xs text-emerald-400 font-semibold mt-1">Touchless Virtual Control</p>
+                        <p class="text-xs text-gray-300 mt-2 leading-relaxed">
+                            Desktop assistant combining real-time MediaPipe hand-tracking gestures for mouse and camera automation with speech recognition for hands-free NLP voice commands and workflow triggers.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="mt-4 pt-3 border-t border-white/10 text-[11px] text-gray-400 mb-4">
+                            Python • PyQt6 • OpenCV • MediaPipe • Speech Recognition
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button
+                                onclick="sendQuickPrompt('Explain your JARVIS AI Voice Assistant with Gesture Control project.')"
+                                class="w-full py-2 px-3 rounded-lg bg-white/5 border border-white/10 text-cyanGlow text-xs font-semibold hover:bg-white/10 transition flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-solid fa-wand-magic-sparkles text-goldAccent"></i> Ask AI About JARVIS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. ShoppersStack E-Commerce Manual Testing Suite -->
+                <div class="p-6 rounded-2xl glass border border-white/10 flex flex-col justify-between hover:border-cyanGlow/40 transition">
+                    <div>
+                        <div class="flex items-center justify-between text-[10px] text-gray-400 mb-2">
+                            <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-cyanGlow border border-blue-500/20">Quality Assurance</span>
+                            <span class="text-cyanGlow font-semibold">STLC Suite</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">ShoppersStack E-Commerce Manual Testing Suite</h3>
+                        <p class="text-xs text-radiantAmber font-semibold mt-1">Boundary Analysis & Test Design</p>
+                        <p class="text-xs text-gray-300 mt-2 leading-relaxed">
+                            Engineered test coverage spanning user authentication, dynamic search, cart logic, and checkout. Designed positive/negative scenarios via Equivalence Partitioning and logged defect life cycle reports.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="mt-4 pt-3 border-t border-white/10 text-[11px] text-gray-400 mb-4">
+                            STLC • Test Cases • BVA & EP • Defect Life Cycle • Git
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a
+                                href="https://github.com/Akash111-a/SHOPPERSTACK_TEST_CASE"
+                                target="_blank"
+                                rel="noreferrer"
+                                class="w-full py-2 px-3 rounded-lg bg-white/5 border border-white/10 text-gray-200 text-xs font-bold hover:text-white hover:border-cyanGlow hover:bg-white/10 transition flex items-center justify-center gap-1.5"
+                            >
+                                <i class="fa-brands fa-github"></i> View Test Documentation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education" class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-cyanGlow">Academics</h2>
+            <div class="space-y-4">
+                <div class="p-5 rounded-xl glass border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white">B.Tech in Computer Science and Engineering</h3>
+                        <p class="text-xs text-cyanGlow">Balasore College of Engineering and Technology</p>
+                    </div>
+                    <div class="text-right sm:text-right">
+                        <span class="text-xs text-gray-400 block">2022 – 2026</span>
+                        <span class="text-xs font-bold text-emerald-400">CGPA: 8.01 / 10</span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-xl glass border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Higher Secondary Education (Class XII - Science)</h3>
+                        <p class="text-xs text-cyanGlow">Bhadrak Autonomous College</p>
+                    </div>
+                    <div class="text-right sm:text-right">
+                        <span class="text-xs text-gray-400 block">2019 – 2021</span>
+                        <span class="text-xs font-bold text-emerald-400">Percentage: 74%</span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-xl glass border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Secondary Education (Class X)</h3>
+                        <p class="text-xs text-cyanGlow">Nadigaon High School</p>
+                    </div>
+                    <div class="text-right sm:text-right">
+                        <span class="text-xs text-gray-400 block">2019</span>
+                        <span class="text-xs font-bold text-emerald-400">Percentage: 70%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="space-y-6">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-radiantAmber">Contact</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-5 p-6 rounded-2xl glass border border-white/10 space-y-4">
+                    <h3 class="text-base font-bold text-white">Direct Information</h3>
+                    <p class="text-xs text-gray-300">Feel free to reach out for SDE, Manual Testing, or QA engineering opportunities.</p>
+                    <div class="space-y-3 text-xs text-gray-300 pt-2">
+                        <p><i class="fa-solid fa-envelope text-cyanGlow w-5"></i> abhisekakash111@gmail.com</p>
+                        <p><i class="fa-solid fa-phone text-radiantAmber w-5"></i> (+91) 7656817298</p>
+                        <p><i class="fa-solid fa-location-dot text-blue-400 w-5"></i> Bhadrak, Odisha - 756119</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <form id="contactForm" onsubmit="handleContact(event)" class="p-6 rounded-2xl glass border border-white/10 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="text" id="cName" required placeholder="Your Name" class="px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyanGlow">
+                            <input type="email" id="cEmail" required placeholder="Your Email" class="px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyanGlow">
+                        </div>
+                        <input type="text" id="cSubject" required placeholder="Subject (e.g. SDE / QA Role Discussion)" class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyanGlow">
+                        <textarea id="cMessage" rows="3" required placeholder="Your message..." class="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyanGlow"></textarea>
+                        <button type="submit" id="cBtn" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-neonBlue to-radiantAmber text-white font-bold text-xs shadow-md hover:opacity-90 transition">
+                            Send Message
+                        </button>
+                        <p id="cStatus" class="text-xs text-center min-h-[16px]"></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 glass py-6 px-4 text-center text-xs text-gray-500">
+        &copy; 2026 Abhisek Jena (Akash). All rights reserved. Built with FastAPI & Groq.
+    </footer>
+
+    <!-- AI Assistant Floating Launcher -->
+    <button onclick="openModal()" class="fixed bottom-6 right-6 z-40 px-4 py-3 rounded-full bg-gradient-to-r from-neonBlue to-cyanGlow text-white text-xs font-bold shadow-lg hover:scale-105 active:scale-95 transition flex items-center gap-2">
+        <i class="fa-solid fa-sparkles text-goldAccent"></i> Ask My AI
+    </button>
+
+    <!-- AI Assistant Streaming Modal -->
+    <div id="aiModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm hidden">
+        <div class="relative w-full max-w-2xl h-[85vh] max-h-[650px] flex flex-col rounded-2xl glass border border-white/20 bg-darkSurface shadow-2xl overflow-hidden">
+            
+            <div class="p-4 border-b border-white/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-neonBlue to-radiantAmber flex items-center justify-center text-white text-xs">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-white">Abhisek's Personal AI</h4>
+                        <span class="text-[10px] text-emerald-400">Groq Llama-3.3 Powered</span>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs leading-relaxed">
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-gray-200">
+                    Hello! I'm Abhisek's AI representative. You can ask me about his DoomAI resume parser, JARVIS assistant, ShoppersStack testing suite, SQL practice, or academic record.
+                </div>
+            </div>
+
+            <!-- Suggested prompts -->
+            <div class="px-3 py-2 border-t border-white/5 flex gap-2 overflow-x-auto no-scrollbar">
+                <button onclick="sendQuickPrompt('Explain your DoomAI resume parser project.')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white/5 text-[10px] text-gray-300 hover:text-cyanGlow border border-white/10">DoomAI Parser</button>
+                <button onclick="sendQuickPrompt('Explain your JARVIS AI Voice Assistant with Gesture Control project.')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white/5 text-[10px] text-gray-300 hover:text-cyanGlow border border-white/10">JARVIS Assistant</button>
+                <button onclick="sendQuickPrompt('What are your skills in Manual Testing and SQL?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white/5 text-[10px] text-gray-300 hover:text-cyanGlow border border-white/10">QA & SQL Skills</button>
+                <button onclick="sendQuickPrompt('What is your educational background and CGPA?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-white/5 text-[10px] text-gray-300 hover:text-cyanGlow border border-white/10">Education & CGPA</button>
+            </div>
+
+            <!-- Chat Input -->
+            <form onsubmit="handleChatSubmit(event)" class="p-3 border-t border-white/10 flex gap-2">
+                <input type="text" id="chatInput" required placeholder="Ask anything about Abhisek..." class="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white focus:outline-none focus:border-cyanGlow">
+                <button type="submit" id="chatBtn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-neonBlue to-cyanGlow text-white text-xs font-bold">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const API_URL = "https://portfolio-001-1.onrender.com"; 
+        // const API_URL = "http://127.0.0.1:8000"; 
+        let conversation = [];
+
+        function openModal() {
+            document.getElementById("aiModal").classList.remove("hidden");
+            document.getElementById("chatInput").focus();
+        }
+        function closeModal() {
+            document.getElementById("aiModal").classList.add("hidden");
+        }
+
+        function sendQuickPrompt(prompt) {
+            document.getElementById("chatInput").value = prompt;
+            handleChatSubmit(new Event('submit'));
+        }
+
+        async function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById("chatInput");
+            const btn = document.getElementById("chatBtn");
+            const box = document.getElementById("chatMessages");
+            const query = input.value.trim();
+            if (!query) return;
+
+            // Render user bubble
+            conversation.push({ role: "user", content: query });
+            box.innerHTML += `<div class="p-3 rounded-xl bg-neonBlue/80 text-white ml-auto max-w-[85%] text-right">${escapeHTML(query)}</div>`;
+            input.value = "";
+            btn.disabled = true;
+
+            // Render streaming bot bubble
+            const botBubble = document.createElement("div");
+            botBubble.className = "p-3 rounded-xl bg-white/5 border border-white/10 text-gray-200 max-w-[85%] cursor-blink";
+            box.appendChild(botBubble);
+            box.scrollTop = box.scrollHeight;
+
+            try {
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ messages: conversation })
+                });
+
+                if (!response.ok) throw new Error("Could not reach backend.");
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let accumulated = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    accumulated += decoder.decode(value, { stream: true });
+                    botBubble.innerHTML = marked.parse(accumulated);
+                    box.scrollTop = box.scrollHeight;
+                }
+                conversation.push({ role: "assistant", content: accumulated });
+            } catch (err) {
+                botBubble.innerHTML = `<span class="text-red-400">Error: ${err.message}. Make sure the backend server is running.</span>`;
+            } finally {
+                botBubble.classList.remove("cursor-blink");
+                btn.disabled = false;
+                box.scrollTop = box.scrollHeight;
+            }
+        }
+
+        async function handleContact(e) {
+            e.preventDefault();
+            const status = document.getElementById("cStatus");
+            const btn = document.getElementById("cBtn");
+            status.textContent = "Sending...";
+            btn.disabled = true;
+
+            const payload = {
+                name: document.getElementById("cName").value,
+                email: document.getElementById("cEmail").value,
+                subject: document.getElementById("cSubject").value,
+                message: document.getElementById("cMessage").value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/api/contact`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error();
+                status.className = "text-xs text-center text-emerald-400";
+                status.textContent = "Message sent successfully!";
+                document.getElementById("contactForm").reset();
+            } catch {
+                status.className = "text-xs text-center text-red-400";
+                status.textContent = "Could not send. Please email directly at abhisekakash111@gmail.com.";
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // Three.js Topographic Contour Simulation
+        (function initThree() {
+            const container = document.getElementById("canvas-container");
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, -15, 20);
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            const cols = 45, rows = 45;
+            const geom = new THREE.PlaneGeometry(50, 45, cols, rows);
+            const count = geom.attributes.position.count;
+            const colors = new Float32Array(count * 3);
+
+            for (let i = 0; i < count; i++) {
+                const u = (i % (cols + 1)) / cols;
+                colors[i * 3] = 0.1 + 0.85 * (1.0 - u);
+                colors[i * 3 + 1] = 0.3 + 0.3 * u;
+                colors[i * 3 + 2] = 0.95 * u;
+            }
+            geom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const mat = new THREE.MeshBasicMaterial({ wireframe: true, vertexColors: true, transparent: true, opacity: 0.2 });
+            const plane = new THREE.Mesh(geom, mat);
+            plane.rotation.x = -Math.PI / 3.5;
+            scene.add(plane);
+
+            let clock = new THREE.Clock();
+            function animate() {
+                const t = clock.getElapsedTime() * 0.6;
+                const pos = geom.attributes.position;
+                for (let i = 0; i < pos.count; i++) {
+                    const x = pos.getX(i);
+                    const y = pos.getY(i);
+                    pos.setZ(i, Math.sin(x * 0.25 + t) * 1.5 + Math.cos(y * 0.28 + t) * 1.2);
+                }
+                pos.needsUpdate = true;
+                renderer.render(scene, camera);
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        })();
+    </script>
+</body>
+</html>
