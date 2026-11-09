@@ -15,7 +15,7 @@ if not GROQ_API_KEY:
     raise RuntimeError("GROQ_API_KEY is missing from .env file.")
 
 groq_client = Groq(api_key=GROQ_API_KEY)
-MODEL_NAME = "Mistral Medium 3.5 (128B)"
+MODEL_NAME = "openai/gpt-oss-120b"
 
 app = FastAPI(title="Abhisek Jena Portfolio AI")
 
